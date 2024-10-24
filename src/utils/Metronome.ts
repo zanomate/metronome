@@ -1,17 +1,25 @@
 import { Big } from 'big.js'
 import { EMPH_BEEP, NORMAL_BEEP } from '../assets/sounds.ts'
 
-const beep = (src: string) => new Audio(src).play()
+const emphBeep = new Audio(EMPH_BEEP)
+const normalBeep = new Audio(NORMAL_BEEP)
 
 export class Metronome {
   intervalId: number | null = null
   tempo: boolean[] = []
-  current: number = 0
+  cursor: number = 0
+
+  play(emph: boolean) {
+    const beep = emph ? emphBeep : normalBeep
+    beep.pause()
+    beep.currentTime = 0
+    beep.play()
+  }
 
   beat(onBeat: (index: number) => void) {
-    beep(this.tempo[this.current] ? EMPH_BEEP : NORMAL_BEEP)
-    onBeat(this.current)
-    this.current = (this.current + 1) % this.tempo.length
+    this.play(this.tempo[this.cursor])
+    onBeat(this.cursor)
+    this.cursor = (this.cursor + 1) % this.tempo.length
   }
 
   start(bpm: number, tempo: boolean[], onBeat: (index: number) => void) {
@@ -27,6 +35,6 @@ export class Metronome {
   stop() {
     if (this.intervalId === null) return
     clearInterval(this.intervalId)
-    this.current = 0
+    this.cursor = 0
   }
 }
