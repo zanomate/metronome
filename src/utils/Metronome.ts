@@ -1,8 +1,8 @@
 import { Big } from 'big.js'
-import { EMPH_BEEP, NORMAL_BEEP } from '../assets/sounds.ts'
+import { HIGH_BEEP, LOW_BEEP } from '../assets/sounds.ts'
 
-const emphBeep = new Audio(EMPH_BEEP)
-const normalBeep = new Audio(NORMAL_BEEP)
+const highBeep = new Audio(HIGH_BEEP)
+const lowBeep = new Audio(LOW_BEEP)
 
 export class Metronome {
   intervalId: number | null = null
@@ -10,7 +10,7 @@ export class Metronome {
   cursor: number = 0
 
   play(emph: boolean) {
-    const beep = emph ? emphBeep : normalBeep
+    const beep = emph ? highBeep : lowBeep
     beep.pause()
     beep.currentTime = 0
     beep.play()
